@@ -135,11 +135,11 @@ public class App {
         bytes[1] = divisor;
         System.arraycopy(codewords, 0, bytes, 2, codewords.length);
 
-        BitSet teste = BitSet.valueOf(bytes);
-        for (int i = 0; i < teste.length(); i++) {
-            System.out.print(teste.get(i) == true ? "1" : "0");
-        }
-        System.out.println();
+        // BitSet teste = BitSet.valueOf(bytes);
+        // for (int i = 0; i < teste.length(); i++) {
+        // System.out.print(teste.get(i) == true ? "1" : "0");
+        // }
+        // System.out.println();
 
         fos.write(bytes);
         fos.close();

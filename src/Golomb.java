@@ -50,9 +50,9 @@ public class Golomb implements IEncoder {
         BitSet bits = BitSet.valueOf(data);
 
         // System.out.println("String lida decoder: ");
-        for (int i = 0; i < bits.size(); i++) {
-            System.out.print(bits.get(i) == true ? "1" : "0");
-        }
+        // for (int i = 0; i < bits.size(); i++) {
+        // System.out.print(bits.get(i) == true ? "1" : "0");
+        // }
         // System.out.println();
 
         ArrayList<String> simbolosDecodificados = new ArrayList<>();
