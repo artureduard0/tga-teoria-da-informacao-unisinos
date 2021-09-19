@@ -59,7 +59,7 @@ public class App {
                     int divisor = 0;
 
                     if (opcao == 0) {
-                        Object[] algoritmos = { "Golumb", "Elias-Gamma", "Fibonnaci", "Unaria", "Delta" };
+                        Object[] algoritmos = { "Golumb", "Elias-Gamma", "Fibonacci", "Unaria", "Delta" };
                         algoritmo = JOptionPane.showOptionDialog(null, "Escolha o algoritmo: ",
                                 "Trabalho GA - Encoder/Decoder", JOptionPane.DEFAULT_OPTION,
                                 JOptionPane.INFORMATION_MESSAGE, null, algoritmos, algoritmos[0]);
@@ -80,7 +80,7 @@ public class App {
 
                         IEncoder encoder = getEncoder(algoritmo, divisor);
 
-                        byte algoritmoByte = (byte) 0;
+                        byte algoritmoByte = (byte) algoritmo;
                         byte divisorByte = (byte) divisor;
 
                         BitSet encodedBits = encoder.encode(data);
@@ -116,6 +116,9 @@ public class App {
         switch (algoritmo) {
             case 0:
                 encoder = new Golomb(divisor);
+                break;
+            case 1:
+                encoder = new EliasGamma();
                 break;
             default:
                 break;
