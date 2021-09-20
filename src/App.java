@@ -123,6 +123,12 @@ public class App {
             case 2:
                 encoder = new Fibonacci();
                 break;
+            case 3:
+                encoder = new Unaria();
+                break;
+            case 4:
+                encoder = new Delta();
+                break;
             default:
                 break;
         }

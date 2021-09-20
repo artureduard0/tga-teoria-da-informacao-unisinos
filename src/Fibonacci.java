@@ -9,20 +9,25 @@ public class Fibonacci implements IEncoder {
 
         int indexBit = 0; // index dos bits no BitSet
 
-        for (byte b: data) {
+        for (byte b : data) {
             int simbolo = b;
-
-            // Encontra o índice máximo da sequência Fibonacci, com resultado menor ou igual ao símbolo
+            // Encontra o índice máximo da sequência Fibonacci, com resultado menor ou igual
+            // ao símbolo
             int indiceMaximoFibonacci = encontrarIndiceFibonacci(simbolo);
+
             ArrayList<Integer> indicesValidos = new ArrayList<>();
             int soma = 0;
 
-            // Parte do maior índice até 1, decrescendo, somando os valores até fechar exatamente o valor símbolo.
-            // Armazena os índices numa lista auxiliar para depois armazenar as informações no BitSet de saída.
+            // Parte do maior índice até 1, decrescendo, somando os valores até fechar
+            // exatamente o valor símbolo.
+            // Armazena os índices numa lista auxiliar para depois armazenar as informações
+            // no BitSet de saída.
             for (int i = indiceMaximoFibonacci; i >= 1; i--) {
-                if (soma == simbolo) break;
+                if (soma == simbolo)
+                    break;
 
                 int fibonacciIndice = fibonacci(i);
+
                 int somaTemporaria = soma + fibonacciIndice;
 
                 if (somaTemporaria <= simbolo) {
@@ -31,17 +36,18 @@ public class Fibonacci implements IEncoder {
                 }
             }
 
-            // Partindo de 1 até o índice máximo, já que 0 não conta para o algoritmo, grava 0 ou 1 conforme o índice
+            // Partindo de 1 até o índice máximo, já que 0 não conta para o algoritmo, grava
+            // 0 ou 1 conforme o índice
             // caso ele seja considerado na soma.
             for (int i = 1; i <= indiceMaximoFibonacci; i++) {
                 bitsCodificados.set(indexBit++, indicesValidos.contains(i));
             }
 
-            //adiciona o stop bit ao final da palavra
+            // adiciona o stop bit ao final da palavra
             bitsCodificados.set(indexBit++, true);
         }
-
         return bitsCodificados;
+
     }
 
     @Override
@@ -62,10 +68,12 @@ public class Fibonacci implements IEncoder {
                     stopBitEncontrado = true;
                 }
 
-                // Adiciona os bits da palavra em um BitSet auxiliar que é utilizado na hora de somar os valores fibonacci
+                // Adiciona os bits da palavra em um BitSet auxiliar que é utilizado na hora de
+                // somar os valores fibonacci
                 bitsPalavra.set(indexBitsPalavra++, bitAtual);
             } else {
-                // quando encontra o stop bit, decodifica os bits recebidos antes dele e transforma em um caractere.
+                // quando encontra o stop bit, decodifica os bits recebidos antes dele e
+                // transforma em um caractere.
                 int simboloEncontrado = decodificarFibonacci(bitsPalavra);
                 String simbolo = Character.toString((char) simboloEncontrado);
                 simbolosDecodificados.add(simbolo);
@@ -93,7 +101,8 @@ public class Fibonacci implements IEncoder {
         return soma;
     }
 
-    // Encontra o maior índice de Fibonacci onde o resultado é menor ou igual ao símbolo a ser codificado
+    // Encontra o maior índice de Fibonacci onde o resultado é menor ou igual ao
+    // símbolo a ser codificado
     private int encontrarIndiceFibonacci(int simbolo) {
         int indice = 0;
 
