@@ -8,20 +8,20 @@ public class EliasGamma implements IEncoder {
         BitSet bitsCodificados = new BitSet();
         int indexBit = 0; // index dos bits no BitSet
 
-        for (byte b: data) { 
+        for (byte b: data) {
             int simbolo = b;
 
             //prefixo: encontrar o valor N que, elevado à potência de dois, fica o mais próximo do número a ser codificado.
             boolean encontrouExpoente = false;
             int expoente = 0;
-            
+
             while (!encontrouExpoente) {
                 double potenciaAtual = Math.pow(2, expoente);
                 double potenciaSeguinte = Math.pow(2, expoente + 1);
 
-                if (potenciaAtual <= simbolo && potenciaSeguinte > simbolo) { 
+                if (potenciaAtual <= simbolo && potenciaSeguinte > simbolo) {
                     encontrouExpoente = true;
-                    break;
+                    continue;
                 }
 
                 expoente++;
@@ -32,25 +32,15 @@ public class EliasGamma implements IEncoder {
 
             //sufixo: resto da divisão por 2ⁿ
             int restoDivisao = (int) (simbolo % Math.pow(2, expoente));
-            
-            //stop bit
-            bitsCodificados.set(indexBit++, true);
 
-            // concatenar o sufixo ao stop bit
-            // o comprimento do sufixo é igual ao do prefixo
-            String sufixo = Integer.toBinaryString(restoDivisao);
+            // left shifting de N sobre o stop bit para fazer com que o sufixo tenha o mesmo comprimento do prefixo
+            // or exclusivo pra substituir os 0s pelo resto da equação
+            String sufixo = Integer.toBinaryString((1 << expoente) | restoDivisao);
 
             for (int i = 0; i < sufixo.length(); i++) {
-                bitsCodificados.set(indexBit++, sufixo.charAt(i) == '1' ? true : false);
+                bitsCodificados.set(indexBit++, sufixo.charAt(i) == '1');
             }
         }
-
-        // printar bits
-        // System.out.println("String a ser escrita encoder: ");
-        // for (int i = 0; i < indexBit; i++) {
-        // System.out.print(bitsCodificados.get(i) == true ? "1" : "0");
-        // }
-        // System.out.println();
 
         return bitsCodificados;
     }
@@ -61,29 +51,30 @@ public class EliasGamma implements IEncoder {
 
         ArrayList<String> simbolosDecodificados = new ArrayList<>();
         boolean stopBitEncontrado = false;
-        String sufixo = "";
-        int prefixoBits = 0;
+        StringBuilder sufixo = new StringBuilder();
+        StringBuilder prefixo = new StringBuilder();
         int sufixoBits = 0;
-        
+
         for (int i = 0; i < bits.size(); i++) {
             if (!stopBitEncontrado) {
-                if (bits.get(i) == true) {
+                if (bits.get(i)) {
                     stopBitEncontrado = true;
                 } else {
-                    prefixoBits++;
+                    prefixo.append(bits.get(i) ? "1" : "0");
                 }
-            } else { 
-                sufixo += bits.get(i) == true ? "1" : "0";
+            } else {
+                sufixo.append(bits.get(i) ? "1" : "0");
                 sufixoBits++;
 
-                if (sufixoBits == prefixoBits) { 
-                    int simboloNum = (int) Math.pow(2, prefixoBits) + Integer.parseUnsignedInt(sufixo, 2);
+                int comprimentoPrefixo = prefixo.length();
+                if (sufixoBits == comprimentoPrefixo) {
+                    int simboloNum = (int) Math.pow(2, comprimentoPrefixo) + Integer.parseUnsignedInt(sufixo.toString(), 2);
                     String simbolo = Character.toString((char) simboloNum);
                     simbolosDecodificados.add(simbolo);
-    
-                    sufixo = "";
+
+                    sufixo = new StringBuilder();
+                    prefixo = new StringBuilder();
                     sufixoBits = 0;
-                    prefixoBits = 0;
                     stopBitEncontrado = false;
                 }
             }
