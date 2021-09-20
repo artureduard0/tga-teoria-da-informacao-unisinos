@@ -120,6 +120,9 @@ public class App {
             case 1:
                 encoder = new EliasGamma();
                 break;
+            case 2:
+                encoder = new Fibonacci();
+                break;
             default:
                 break;
         }
