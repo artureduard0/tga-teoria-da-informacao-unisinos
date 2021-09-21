@@ -16,8 +16,7 @@ public class Golomb implements IEncoder {
         int indexBit = 0; // index dos bits no BitSet
 
         for (byte b : data) {
-            int simbolo = b;
-            // System.out.println(simbolo);
+            int simbolo = b & 0xff;
 
             // prefixo: repetir zeros conforme o número do resultado da divisão do int atual
             // pelo divisor
