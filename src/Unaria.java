@@ -8,16 +8,12 @@ public class Unaria implements IEncoder {
     int index = 0;
 
     for (byte b : data) {
-
-      if (index == 0)
-        index = index + b;
-      else
-        index = index + (b + 1);
+      index = index + b;
 
       encodedBits.set(index);
+      index++;
     }
 
-    // System.out.println(encodedBits);
     return encodedBits;
   }
 
