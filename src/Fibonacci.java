@@ -10,7 +10,7 @@ public class Fibonacci implements IEncoder {
         int indexBit = 0; // index dos bits no BitSet
 
         for (byte b : data) {
-            int simbolo = b;
+            int simbolo = b & 0xff;
             // Encontra o índice máximo da sequência Fibonacci, com resultado menor ou igual
             // ao símbolo
             int indiceMaximoFibonacci = encontrarIndiceFibonacci(simbolo);
@@ -22,7 +22,7 @@ public class Fibonacci implements IEncoder {
             // exatamente o valor símbolo.
             // Armazena os índices numa lista auxiliar para depois armazenar as informações
             // no BitSet de saída.
-            for (int i = indiceMaximoFibonacci; i >= 1; i--) {
+            for (int i = indiceMaximoFibonacci; i >= 2; i--) {
                 if (soma == simbolo)
                     break;
 
@@ -36,10 +36,9 @@ public class Fibonacci implements IEncoder {
                 }
             }
 
-            // Partindo de 1 até o índice máximo, já que 0 não conta para o algoritmo, grava
-            // 0 ou 1 conforme o índice
-            // caso ele seja considerado na soma.
-            for (int i = 1; i <= indiceMaximoFibonacci; i++) {
+            // Partindo de 2 até o índice máximo, já que 0 não conta para o algoritmo, grava
+            // 0 ou 1 conforme o índice caso ele seja considerado na soma.
+            for (int i = 2; i <= indiceMaximoFibonacci; i++) {
                 bitsCodificados.set(indexBit++, indicesValidos.contains(i));
             }
 
@@ -56,7 +55,7 @@ public class Fibonacci implements IEncoder {
         BitSet bitsRecebidos = BitSet.valueOf(data);
         boolean stopBitEncontrado = false;
         BitSet bitsPalavra = new BitSet();
-        int indexBitsPalavra = 1;
+        int indexBitsPalavra = 0;
 
         for (int i = 0; i < bitsRecebidos.size() - 1; i++) {
             // Procura um par de 1, o que indica que o segundo 1 é o stop bit.
@@ -80,7 +79,7 @@ public class Fibonacci implements IEncoder {
 
                 stopBitEncontrado = false;
                 bitsPalavra = new BitSet();
-                indexBitsPalavra = 1;
+                indexBitsPalavra = 0;
             }
 
         }
@@ -92,9 +91,9 @@ public class Fibonacci implements IEncoder {
         int soma = 0;
 
         // Adiciona o valor à soma caso o bit do índice seja 1
-        for (int i = 1; i < sequencia.size(); i++) {
+        for (int i = 0; i < sequencia.size(); i++) {
             if (sequencia.get(i)) {
-                soma += fibonacci(i);
+                soma += fibonacci(i + 2);
             }
         }
 
