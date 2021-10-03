@@ -79,15 +79,35 @@ public class App {
                         }
 
                         IEncoder encoder = getEncoder(algoritmo, divisor);
-
-                        byte algoritmoByte = (byte) algoritmo;
-                        byte divisorByte = (byte) divisor;
-
                         BitSet encodedBits = encoder.encode(data);
-                        writeBits(nomeArquivo + ".cod", encodedBits, algoritmoByte, divisorByte);
+
+                        // criar array de bytes dos codewords e adicionar algoritmo e divisor no inicio
+                        byte[] codewords = encodedBits.toByteArray();
+                        byte[] bytes = new byte[codewords.length + 2];
+                        bytes[0] = (byte) algoritmo;
+                        bytes[1] = (byte) divisor;
+                        System.arraycopy(codewords, 0, bytes, 2, codewords.length);
+                        writeBits(nomeArquivo + ".cod", bytes);
+
+                        // tratamento de erros
+                        TratamentoErros trat = new TratamentoErros();
+                        byte[] tratErro = trat.encode(bytes);
+                        writeBits(nomeArquivo + ".ecc", tratErro);
+
                         JOptionPane.showMessageDialog(null, "Arquivo codificado!", "Sucesso!",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else {
+                        File eccFile = new File(nomeArquivo + ".ecc");
+                        Path eccPath = eccFile.toPath();
+                        byte[] dataEcc = read(eccPath);
+                        TratamentoErros trat = new TratamentoErros();
+
+                        if (!trat.checkCrc8Decode(dataEcc)) {
+                            JOptionPane.showMessageDialog(null, "Saindo...", "Erro no cabeçalho do arquivo!",
+                                    JOptionPane.ERROR_MESSAGE);
+                            return;
+                        }
+
                         algoritmo = (int) data[0];
                         divisor = (int) data[1];
 
@@ -105,6 +125,7 @@ public class App {
                 }
             }
         } catch (Exception e) {
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "Ah não, uma exceção aconteceu! Saindo...", "Erro fatal!",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -136,16 +157,9 @@ public class App {
         return encoder;
     }
 
-    public static void writeBits(String filename, BitSet bits, byte algoritmo, byte divisor) throws IOException {
+    public static void writeBits(String filename, byte[] bytes) throws IOException {
         File outFile = new File(filename);
         FileOutputStream fos = new FileOutputStream(outFile);
-
-        // criar array de bytes e adicionar algoritmo e divisor no inicio
-        byte[] codewords = bits.toByteArray();
-        byte[] bytes = new byte[codewords.length + 2];
-        bytes[0] = algoritmo;
-        bytes[1] = divisor;
-        System.arraycopy(codewords, 0, bytes, 2, codewords.length);
 
         // BitSet teste = BitSet.valueOf(bytes);
         // for (int i = 0; i < teste.length(); i++) {
