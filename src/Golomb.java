@@ -34,26 +34,12 @@ public class Golomb implements IEncoder {
             }
         }
 
-        // printar bits
-        // System.out.println("String a ser escrita encoder: ");
-        // for (int i = 0; i < indexBit; i++) {
-        // System.out.print(encodedBits.get(i) == true ? "1" : "0");
-        // }
-        // System.out.println();
-
         return encodedBits;
     }
 
     @Override
     public ArrayList<String> decode(byte[] data) {
         BitSet bits = BitSet.valueOf(data);
-
-        // System.out.println("String lida decoder: ");
-        // for (int i = 0; i < bits.size(); i++) {
-        // System.out.print(bits.get(i) == true ? "1" : "0");
-        // }
-        // System.out.println();
-
         ArrayList<String> simbolosDecodificados = new ArrayList<>();
 
         // Primeiro procurar o algoritmo e o divisor. Depois decodificar.
@@ -76,7 +62,6 @@ public class Golomb implements IEncoder {
 
                 if (sufixoBits >= tamanhoSufixoRec) {
                     int simboloNum = (prefixo.length() * this.k) + Integer.parseUnsignedInt(sufixo, 2);
-                    // System.out.println(simboloNum);
                     String simbolo = Character.toString((char) simboloNum);
                     simbolosDecodificados.add(simbolo);
 
