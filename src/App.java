@@ -108,6 +108,9 @@ public class App {
                             return;
                         }
 
+                        // Insere os dados obtidos pelo tratamento de erros
+                        data = trat.checkHamming(dataEcc);
+
                         algoritmo = (int) data[0];
                         divisor = (int) data[1];
 
@@ -135,23 +138,23 @@ public class App {
         IEncoder encoder = null;
 
         switch (algoritmo) {
-            case 0:
-                encoder = new Golomb(divisor);
-                break;
-            case 1:
-                encoder = new EliasGamma();
-                break;
-            case 2:
-                encoder = new Fibonacci();
-                break;
-            case 3:
-                encoder = new Unaria();
-                break;
-            case 4:
-                encoder = new Delta();
-                break;
-            default:
-                break;
+        case 0:
+            encoder = new Golomb(divisor);
+            break;
+        case 1:
+            encoder = new EliasGamma();
+            break;
+        case 2:
+            encoder = new Fibonacci();
+            break;
+        case 3:
+            encoder = new Unaria();
+            break;
+        case 4:
+            encoder = new Delta();
+            break;
+        default:
+            break;
         }
 
         return encoder;

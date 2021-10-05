@@ -27,3 +27,11 @@ Passo a passo do decodificador Delta:
    1. 0 - Adiciona o último símbolo no output.
    2. 1 - Verifica o sinal do delta que será recebido.
 4. Verifica o delta recebido e seu respectivo sinal e adiciona o próximo símbolo no output. Retorna ao passo 3 ou finaliza caso encontre o último bit positivo do arquivo.
+
+## Tratamento de erros
+
+### Hamming
+À partir do 3 byte do arquivo compactado (após a aplicação do CRC no cabeçalho) é adicionada a redundância com palavras Hamming para tratamento e recuperação de erros,
+à cada 4 bits de conteúdo são adicionados 3 bits de redundância para o tratamento de erros, seguindo o algoritmo Hamming. Esta etapa é sempre realizada após a codificação com
+algum dos algoritmos disponíveis, na etapa de decodificação, o algoritmo verifica os erros, corrige caso necessário, informa no console a posição onde o erro foi detectado e 
+então remove os 3 bits de cada palavra para enviar ao decoder específico de cada algoritmo de compressão.
