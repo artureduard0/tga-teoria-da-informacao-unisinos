@@ -9,7 +9,7 @@ public class EliasGamma implements IEncoder {
         int indexBit = 0; // index dos bits no BitSet
 
         for (byte b: data) {
-            int simbolo = b;
+            int simbolo = b & 0xff;
 
             //prefixo: encontrar o valor N que, elevado à potência de dois, fica o mais próximo do número a ser codificado.
             boolean encontrouExpoente = false;

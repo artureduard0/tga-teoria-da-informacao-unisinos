@@ -18,7 +18,7 @@ public class Fibonacci implements IEncoder {
             ArrayList<Integer> indicesValidos = new ArrayList<>();
             int soma = 0;
 
-            // Parte do maior índice até 1, decrescendo, somando os valores até fechar
+            // Parte do maior índice até 2, decrescendo, somando os valores até fechar
             // exatamente o valor símbolo.
             // Armazena os índices numa lista auxiliar para depois armazenar as informações
             // no BitSet de saída.
@@ -36,7 +36,7 @@ public class Fibonacci implements IEncoder {
                 }
             }
 
-            // Partindo de 2 até o índice máximo, já que 0 não conta para o algoritmo, grava
+            // Partindo de 2 até o índice máximo, já que fibonacci([0, 1]) não contam para o algoritmo, grava
             // 0 ou 1 conforme o índice caso ele seja considerado na soma.
             for (int i = 2; i <= indiceMaximoFibonacci; i++) {
                 bitsCodificados.set(indexBit++, indicesValidos.contains(i));

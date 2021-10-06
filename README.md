@@ -25,7 +25,9 @@ O decodificador Golomb lê o arquivo e faz o caminho inverso, lendo todos os bit
 
 ### Elias-Gamma
 
-Diferente de Golomb, o algoritmo Elias-Gamma não utiliza um divisor para determinar sua codificação e decodificação. Ele se baseia em potências de base 2 para encontrar um expoente N, que será o valor utilizado em ambos os processos, conforme descrito abaixo:
+Diferente de Golomb, o algoritmo Elias-Gamma não utiliza um divisor para determinar sua codificação e decodificação. Ele se baseia em potências de base 2 para encontrar um expoente N, que será o comprimento de seu prefixo, constituído por bits com valor 0, e também do seu sufixo, constituido do resto da divisão do valor a ser codificado por 2<sup>N</sup>. Entre prefixo e sufixo, fica o stop bit. Os processos de codificação e decodificação ocorrem conforme descrito abaixo:
+
+###### Codificador
 1. Cada byte é lido como um inteiro (denominado X);
 2. Partindo de 2<sup>0</sup>, incrementando o expoente em 1, procura o expoente N cujo resultado da potência 2<sup>N</sup> seja o mais próximo ou exatamente o valor de X;
 3. Tendo o valor de N, adiciona N bits 0 de forma unária como prefixo do símbolo codificado;
@@ -35,13 +37,32 @@ Diferente de Golomb, o algoritmo Elias-Gamma não utiliza um divisor para determ
 7. É feito um or exclusivo para que o resto da divisão, em binário, substitua os 0s necessários no sufixo.
 8. Adiciona o resultado à lista de símbolos codificados. Depois de codificar todos os símbolos recebidos, grava em um arquivo .cod.
 
-O decodificador funciona de forma simples:
+###### Decodificador:
 1. Percorre os bits até encontrar o stop bit. Adiciona-os à uma string para fazer a contagem de caracteres.
 2. Após encontrar o stopbit, passa a adicionar os bits em uma outra string, a de sufixo.
 3. Quando o comprimento do sufixo atingir o valor do comprimento do prefixo, calcula a potência 2<sup>N</sup>, sendo N o comprimento do prefixo.
 4. Transforma o sufixo de bits para inteiro, configurando o resto da divisão do valor decodificado pelo resultado do passo anterior. 
 5. Soma esses dois valores e tem o valor original, adicionando-o à lista de caracteres decodificados.
 6. Após decodificar todos os caracteres, salva o resultado em um arquivo .dec.
+
+### Fibonacci
+
+O algoritmo de fibonacci utiliza o resultado de fibonacci mais próximo do valor a ser codificado para efetuar a codificação e decodificação. Sem considerar fibonacci(0) e fibonacci(1), pois têm resultados descartáveis para o algoritmo, parte de fibonacci(2) até fibonacci(N), sendo N o valor que faça o resultado do cálculo de fibonacci ser o mais próximo ou igual ao valor a ser codificado. Esse algoritmo tem o stop bit no final da palavra, formando uma dupla de bits 1, pois o valor de fibonacci(N) sempre vai ser considerado válido na codificação. O símbolo codificado é gerado fazendo a sequência fibonacci de forma decrescente, partindo de fibonacci(N) até fibonacci(2). Para cada valor dessa sequência, o resultado do fibonacci é adicionado à uma variável de soma. Caso a soma seja menor ou igual ao valor a ser codificado, o índice atual é adicionado à lista de índices válidos. Caso fosse ultrapassar, o índice nao é ultrapassado à lista. Após essas iterações, são gravados bits com valor de 0 para os índices inválidos e com valor 1 para os válidos. Abaixo os passos de codificação e decodificação:
+
+###### Codificador:
+1. Cada byte é lido como um inteiro (denominado X);
+2. Encontra o índice máximo, denominado N, da sequência Fibonacci com resultado menor ou igual a X;
+3. Parte de N, de forma decrescente, até 2, efetuando a soma descrita acima e guardando os índices válidos em uma lista.
+4. Partindo de 2 até o N, grava 0 ou 1 no símbolo codificado de acordo com o índice ser válido ou não para a soma do algoritmo.
+5. Adiciona o stop bit ao final do processo.
+6. Os passos se repetem para cada byte recebido, e o resultado é gravado em um arquivo .cod.
+
+###### Decodificador:
+1. Adiciona os bits em uma estrutura auxiliar até que encontre uma sequência de bits com valor 1. 
+2. Ao encontrar o stop bit, itera sobre os bits do símbolo codificado e calcula o valor de fibonacci(i + 2) (aumentando em 2 o índice por não serem considerados 0 e 1) para os índices onde tem bits com valor 1.
+3. Decodifica essa soma e adiciona à uma lista de caracteres decodificados. Repete até o final dos dados.
+4. Grava a lista em um arquivo .dec.
+
 
 ### Unária
 
