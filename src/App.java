@@ -70,7 +70,7 @@ public class App {
 
                             divisor = Integer.parseInt(divisorString == "" ? "0" : divisorString);
 
-                            // sair se for menor que zero ou não for par
+                            // sair se não for um divisor válido
                             if (divisor < 0 || divisor % 2 != 0) {
                                 JOptionPane.showMessageDialog(null, "Saindo...", "Divisor inválido!",
                                         JOptionPane.ERROR_MESSAGE);
@@ -128,7 +128,6 @@ public class App {
                 }
             }
         } catch (Exception e) {
-            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null, "Ah não, uma exceção aconteceu! Saindo...", "Erro fatal!",
                     JOptionPane.ERROR_MESSAGE);
         }
@@ -138,23 +137,23 @@ public class App {
         IEncoder encoder = null;
 
         switch (algoritmo) {
-        case 0:
-            encoder = new Golomb(divisor);
-            break;
-        case 1:
-            encoder = new EliasGamma();
-            break;
-        case 2:
-            encoder = new Fibonacci();
-            break;
-        case 3:
-            encoder = new Unaria();
-            break;
-        case 4:
-            encoder = new Delta();
-            break;
-        default:
-            break;
+            case 0:
+                encoder = new Golomb(divisor);
+                break;
+            case 1:
+                encoder = new EliasGamma();
+                break;
+            case 2:
+                encoder = new Fibonacci();
+                break;
+            case 3:
+                encoder = new Unaria();
+                break;
+            case 4:
+                encoder = new Delta();
+                break;
+            default:
+                break;
         }
 
         return encoder;
@@ -163,13 +162,6 @@ public class App {
     public static void writeBits(String filename, byte[] bytes) throws IOException {
         File outFile = new File(filename);
         FileOutputStream fos = new FileOutputStream(outFile);
-
-        // BitSet teste = BitSet.valueOf(bytes);
-        // for (int i = 0; i < teste.length(); i++) {
-        // System.out.print(teste.get(i) == true ? "1" : "0");
-        // }
-        // System.out.println();
-
         fos.write(bytes);
         fos.close();
     }
