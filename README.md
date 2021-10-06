@@ -2,6 +2,26 @@
 
 Trabalho do GA de Teoria da Computação.
 
+Para rodar o projeto, basta executar o arquivo App.java. Ao executar, uma janela será aberta perguntando qual será o tipo de função a ser empregada: encode ou decode. Ao selecioner encode, deve-se selecionar o arquivo (o filtro por padrão é para .txt, mas é possível mudar) e o algoritmo. Se selecionado o Golomb, deverá ser escolhido o divisor. Ao selecioner decode, será necessário selecionar o arquivo .cod. 
+
+O fluxo da aplicação para codificação é o seguinte: 
+1. Selecionar "Codificar arquivo"
+2. Selecionar o arquivo 
+3. Selecionar o algorimo 
+4. Se Golomb, selecionar o divisor 
+5. Encode dos bits e adição do cabeçalho (byte do algoritmo e byte do divisor)
+6. Gravado o .cod
+7. Calculado o CRC 8 do cabeçalho e Hamming dos bits do conteúdo 
+8. Gravado o .ecc.
+
+O fluxo da aplicação para decodificação é o seguinte:
+1. Selecionar "Decodificar arquivo"
+2. Selecionar o arquivo .cod
+3. Verificação do .ecc
+    1. Se houver divergência nos bits calculados pelo CRC 8, sai da aplicação;
+    2. Se houver divergência de um bit de pariedade no Hamming, é feita a correção.
+5. Conteúdo é decoficado para o .dec.
+
 ## Algoritmos de Compressão
 
 ### Golomb
@@ -11,9 +31,9 @@ O algoritmo Golomb se baseia em um divisor para determinar seu encode/decode.
 O codificador Golomb presente nesse projeto segue os seguintes passos, após ler o arquivo e o divisor (potência de 2), a cada byte:
 1. O símbolo é transformado em um inteiro (unsigned int);
 2. Através desse inteiro, é criada o codeword concatenando:
-    2.1. Prefixo: repete 0 conforme o número do resultado da divisão do símbolo atual pelo divisor;
-    2.2. Stop bit: sempre será 1;
-    2.3. Sufixo: será o resto da divisão convertido em binário de tamanho igual ao log base 2 do divisor.
+    1. Prefixo: repete 0 conforme o número do resultado da divisão do símbolo atual pelo divisor;
+    2. Stop bit: sempre será 1;
+    3. Sufixo: será o resto da divisão convertido em binário de tamanho igual ao log base 2 do divisor.
 3. Esse codeword é inserido no final do vetor de bits e gravado no arquivo .cod.
 
 O decodificador Golomb lê o arquivo e faz o caminho inverso, lendo todos os bits a partir do cabeçalho:
