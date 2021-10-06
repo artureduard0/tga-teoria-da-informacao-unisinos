@@ -9,7 +9,7 @@ O fluxo da aplicação para codificação é o seguinte:
 2. Selecionar o arquivo 
 3. Selecionar o algorimo 
 4. Se Golomb, selecionar o divisor 
-5. Encode dos bits e adição do cabeçalho (byte do algoritmo e byte do divisor)
+5. Encode dos bits conforme algoritmo e divisor e adição do cabeçalho (byte do algoritmo e byte do divisor)
 6. Gravado o .cod
 7. Calculado o CRC 8 do cabeçalho e Hamming dos bits do conteúdo 
 8. Gravado o .ecc.
@@ -20,7 +20,7 @@ O fluxo da aplicação para decodificação é o seguinte:
 3. Verificação do .ecc
     1. Se houver divergência nos bits calculados pelo CRC 8, sai da aplicação;
     2. Se houver divergência de um bit de pariedade no Hamming, é feita a correção.
-5. Conteúdo é decodificado para o .dec.
+5. Conteúdo é decodificado para o .dec conforme o algoritmo e o divisor do cabeçalho.
 
 ## Algoritmos de Compressão
 
