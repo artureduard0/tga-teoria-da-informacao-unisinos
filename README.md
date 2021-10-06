@@ -20,7 +20,7 @@ O fluxo da aplicação para decodificação é o seguinte:
 3. Verificação do .ecc
     1. Se houver divergência nos bits calculados pelo CRC 8, sai da aplicação;
     2. Se houver divergência de um bit de pariedade no Hamming, é feita a correção.
-5. Conteúdo é decoficado para o .dec.
+5. Conteúdo é decodificado para o .dec.
 
 ## Algoritmos de Compressão
 
