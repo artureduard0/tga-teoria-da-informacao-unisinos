@@ -23,6 +23,26 @@ O decodificador Golomb lê o arquivo e faz o caminho inverso, lendo todos os bit
 4. Com o inteiro novamente, tranforma-se no símbolo e adiciona ao vetor de palavras decodificadadas;
 5. Ao final, grava no arquivo .dec.
 
+### Elias-Gamma
+
+Diferente de Golomb, o algoritmo Elias-Gamma não utiliza um divisor para determinar sua codificação e decodificação. Ele se baseia em potências de base 2 para encontrar um expoente N, que será o valor utilizado em ambos os processos, conforme descrito abaixo:
+1. Cada byte é lido como um inteiro (denominado X);
+2. Partindo de 2<sup>0</sup>, incrementando o expoente em 1, procura o expoente N cujo resultado da potência 2<sup>N</sup> seja o mais próximo ou exatamente o valor de X;
+3. Tendo o valor de N, adiciona N bits 0 de forma unária como prefixo do símbolo codificado;
+4. O valor do sufixo é o resto da divisão de X por 2<sup>N</sup>, em binário;
+5. O stop bit é adicionado após o prefixo.
+6. É feito um left shift com o expoente N sobre o stop bit, para que sejam adicionados N zeros no sufixo, tornando-o do mesmo tamanho que o prefixo. 
+7. É feito um or exclusivo para que o resto da divisão, em binário, substitua os 0s necessários no sufixo.
+8. Adiciona o resultado à lista de símbolos codificados. Depois de codificar todos os símbolos recebidos, grava em um arquivo .cod.
+
+O decodificador funciona de forma simples:
+1. Percorre os bits até encontrar o stop bit. Adiciona-os à uma string para fazer a contagem de caracteres.
+2. Após encontrar o stopbit, passa a adicionar os bits em uma outra string, a de sufixo.
+3. Quando o comprimento do sufixo atingir o valor do comprimento do prefixo, calcula a potência 2<sup>N</sup>, sendo N o comprimento do prefixo.
+4. Transforma o sufixo de bits para inteiro, configurando o resto da divisão do valor decodificado pelo resultado do passo anterior. 
+5. Soma esses dois valores e tem o valor original, adicionando-o à lista de caracteres decodificados.
+6. Após decodificar todos os caracteres, salva o resultado em um arquivo .dec.
+
 ### Unária
 
 Este algortimo representa um valor como o tamanho de uma sequência de 0's e representa o fim/início de uma sequência com o stop-bit 1.  

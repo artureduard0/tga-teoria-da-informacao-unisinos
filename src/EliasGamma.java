@@ -56,6 +56,7 @@ public class EliasGamma implements IEncoder {
         int sufixoBits = 0;
 
         for (int i = 0; i < bits.size(); i++) {
+            // Procura o stop bit e enquanto nao o encontra, adiciona os bits ao prefixo
             if (!stopBitEncontrado) {
                 if (bits.get(i)) {
                     stopBitEncontrado = true;
@@ -63,13 +64,16 @@ public class EliasGamma implements IEncoder {
                     prefixo.append(bits.get(i) ? "1" : "0");
                 }
             } else {
+                // Efetua o append de bits no sufixo enquanto não atingir o tamanho do prefixo.
                 sufixo.append(bits.get(i) ? "1" : "0");
                 sufixoBits++;
 
+                // Verifica o comprimento do prefixo. Caso seja igual ao do sufixo, calcula a potência de 2 na base N, onde N é o comprimento do prefixo, e depois adiciona o resto
+                // da divisão, que está no sufixo.
                 int comprimentoPrefixo = prefixo.length();
                 if (sufixoBits == comprimentoPrefixo) {
                     int simboloNum = (int) Math.pow(2, comprimentoPrefixo) + Integer.parseUnsignedInt(sufixo.toString(), 2);
-                    String simbolo = Character.toString((char) simboloNum);
+                    String simbolo = Character.toString((char) simboloNum); // Transforma em caractere e adiciona na lista de símbolos.
                     simbolosDecodificados.add(simbolo);
 
                     sufixo = new StringBuilder();
